@@ -1,45 +1,34 @@
-#include<bits/stdc++.h>
-using namespace std;
-int n,m;
-vector<int> a;
-vector<pair<int,int>> v;
-pair<int,int> p1= {1,1};
-pair<int,int> p2;
-int ret;
-
-int compare(int y,int x){
-	int value1=0;
-	int value2=0;
-	
-	value1 = abs(p1.first-y)+ abs(p1.second-x);
-	value2 = abs(p2.first-y)+ abs(p2.second-x);
-	if(value1>value2) ret+=value2;
-	else ret+=value1;
-	
-	return (value1>value2)? 1 :0;
+#include<algorithm> 
+#include<cstdio>   
+using namespace std; 
+int n, w, px[1003], py[1003], dp[1003][1003], y, x; 
+int d(int a, int b){
+    return abs(px[a] - px[b]) + abs(py[a] - py[b]);
+}
+int getSum(int a, int b){
+    if(a == w + 1 || b == w + 1) return 0; 
+    if(dp[a][b]) return dp[a][b];
+    int next = max(a, b) + 1; 
+    return dp[a][b] = min(getSum(a, next) + d(b, next), getSum(next, b) + d(a, next)); 
+}
+void solve(){
+    int a = 0, b = 1; 
+    for(int i = 2; i < w + 2; i++){
+        if(dp[i][b] + d(a, i) < dp[a][i] + d(b, i)) puts("1"), a = i; 
+        else puts("2"), b = i;  
+    }
+    return; 
+}
+int main(){   
+    scanf("%d %d", &n, &w);
+    px[0] = 1, py[0] = 1; 
+    px[1] = n, py[1] = n; 
+    for(int i = 2; i < w + 2; i++){
+        scanf("%d %d", &y, &x);
+        px[i] = x, py[i] = y; 
+    }
+    printf("%d\n", getSum(0, 1));  
+    solve();
+    return 0;
 }
 
-int main(){
-	cin>>n;
-	p2 = {n,n};
-	cin>>m;
-	for(int i=0; i<m; i++){
-		int c,d;
-		cin>>c>>d;
-	int temp=compare(c,d);
-	if(temp==0){
-		p1.first = c;
-		p1.second = d;
-		a.push_back(1);
-	}
-	else{
-		p2.first=c;
-		p2.second=d;
-		a.push_back(2);
-	}
-	}
-	cout<<ret<<"\n";
-	for(int i : a)
-	cout<<i<<"\n";
-	return 0;
-}
