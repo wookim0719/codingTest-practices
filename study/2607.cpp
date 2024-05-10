@@ -8,16 +8,18 @@ int ret;
 int len;
 
 void check(string str){
-	if(abs(str.size()-len>1)) return ;
 	memset(temp,0,sizeof(temp));
 	int cnt=0;
+	int cnt2=0;
 	for(int i=0; i<str.size(); i++){
 		temp[str[i]-'A']++;
 	}
 	for(int i=0; i<30; i++){
-		cnt+=abs(a[i]-temp[i]);
+		if(a[i]>temp[i])cnt+=a[i]-temp[i];
+		if(a[i]<temp[i])cnt2+=temp[i]-a[i];
 	}
-	if(cnt<=1) ret++;
+	
+	if(cnt<=1&&cnt2<=1) ret++;
 	return ;
 }
 
