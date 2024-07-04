@@ -5,28 +5,41 @@
 using namespace std;
 
 string solution(string number, int k) {
-  stack<char> st;
-    int n = number.size();
-    for (int i = 0; i < n; ++i) {
-        // 현재 숫자가 스택의 최상위 숫자보다 크면 최상위 숫자를 제거
-        while (!st.empty() && k > 0 && st.top() < number[i]) {
-            st.pop();
-            --k;
+    stack<int> s;
+    s.push(0);
+    int num=1;
+    while(true){
+        while(s.size()){
+          int f= s.top();
+          if((number[f]-'0')<(number[num]-'0')){
+            s.pop();
+            number[f]='x'; 
+            k--;
+            if(k==0)break;
         }
-        st.push(number[i]);
+        else break;
+        }
+        s.push(num);
+        if(k==0) break;
+        num++;
+        if(num==number.size()){
+         while(k!=0){
+           int t= s.top();
+            number[t]='x';
+             s.pop();
+             k--;
+         }  
+        }
     }
-
-    // 스택에 남은 숫자들 중, 실제 필요한 숫자만 추출
-    while (k > 0) {
-        st.pop();
-        --k;
+    queue<char> q;
+    for(int i=0; i<number.size(); i++){
+        if(number[i]!='x')
+       q.push(number[i]); 
     }
-
     string answer = "";
-    while (!st.empty()) {
-        answer = st.top() + answer;
-        st.pop();
+    while(q.size()){
+        answer+=q.front();
+        q.pop();
     }
-    
     return answer;
 }
